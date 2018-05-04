@@ -1,4 +1,4 @@
-package simple;
+package version1;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -46,6 +46,12 @@ public class ProxyFactory {
                 }
         );
     }
+
+    /**
+     * 获取aop类的方法的注解并赋给自定义的一些变量，下面根据这些变量是否有值来确定是否有注解
+     * @param aop
+     * @param proxy
+     */
     private void getAnnotation(Class aop,Class proxy){
         //如果有AOP的类
         if(waterLog!=null){
@@ -55,14 +61,14 @@ public class ProxyFactory {
             if(methodsAOP!=null){
                 for(Method logMethod:methodsAOP){
                     // 取得WaterLog类的方法上WaterAOP注解
-                    WaterAop waterAOP=logMethod.getAnnotation(WaterAop.class);
-                    if(waterAOP!=null) {
+                    WaterAnnotation waterAnnotation =logMethod.getAnnotation(WaterAnnotation.class);
+                    if(waterAnnotation !=null) {
                         // 如果AOP上的注解与传入的类名一致
-                        if (proxy.toString().substring(6).equals(waterAOP.Name())) {
-                            if (waterAOP.method() == WaterAop.METHOD.before) {
+                        if (proxy.toString().substring(6).equals(waterAnnotation.Name())) {
+                            if (waterAnnotation.method() == WaterAnnotation.METHOD.before) {
                                 // 赋值 ,后面再执行
                                 beforeMethod=logMethod;
-                            }else if(waterAOP.method() == WaterAop.METHOD.after){
+                            }else if(waterAnnotation.method() == WaterAnnotation.METHOD.after){
                                 afterMethod=logMethod;
                             }
                         }

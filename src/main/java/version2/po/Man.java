@@ -1,4 +1,6 @@
-package simple;
+package version2.po;
+
+import version2.Person;
 
 /**
  * @description:
