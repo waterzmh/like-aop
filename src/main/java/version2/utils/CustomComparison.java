@@ -11,6 +11,6 @@ import java.util.Comparator;
 public class CustomComparison implements Comparator<AnnotationHelper> {
     @Override
     public int compare(AnnotationHelper o1, AnnotationHelper o2) {
-        return o1.getPriority()-o2.getPriority();
+        return o2.getPriority()-o1.getPriority();
     }
 }

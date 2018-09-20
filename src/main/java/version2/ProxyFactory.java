@@ -43,30 +43,10 @@ public class ProxyFactory{
                     Class c = person.getClass();
                     // 获取aop类的方法的注解并赋给自定义的一些变量，下面根据这些变量是否有值来确定是否有注解
                     getAnnotation(aop,c);
-                    if(beforeAnnotationHelper.size()>0){
-                        beforeAnnotationHelper.forEach(annotationHelper -> {
-                            try {
-                                annotationHelper.getMethod().invoke(waterLog);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
+                    executeAnnotationMethod(beforeAnnotationHelper);
                     // 代理对象执行方法并且获得返回值
                     Object returnValue=method.invoke(person,args);
-                    if(afterAnnotationHelper.size()>0){
-                        afterAnnotationHelper.forEach(annotationHelper -> {
-                            try {
-                                annotationHelper.getMethod().invoke(waterLog);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
+                    executeAnnotationMethod(afterAnnotationHelper);
                     return returnValue;
                 }
         );
@@ -106,6 +86,24 @@ public class ProxyFactory{
             //根据优先级排个序
             Collections.sort(beforeAnnotationHelper,customComparison);
             Collections.sort(afterAnnotationHelper,customComparison);
+        }
+    }
+
+    /**
+     * 执行注解方法
+     *
+     */
+    private void executeAnnotationMethod(List<AnnotationHelper> annotationHelpers) {
+        if(annotationHelpers.size()>0){
+            annotationHelpers.forEach(annotationHelper -> {
+                try {
+                    annotationHelper.getMethod().invoke(waterLog);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
